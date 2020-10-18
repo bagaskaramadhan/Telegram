@@ -1,16 +1,15 @@
 <template>
   <div>
-    <div>
       <b-row class="no-gutters">
         <b-col lg="3" class="listUser">
           <b-row>
-            <b-col><h3 style="color: #7E98DF;">Telegram</h3></b-col>
-            <b-col>
+            <b-col class="mt-4 ml-5"><h3 style="color: #7E98DF;">Telegram</h3></b-col>
+            <b-col class="mt-4 mr-4">
               <b-dropdown variant="outline" right class="float-right" menu-class="dropmenu" no-caret>
                <template v-slot:button-content>
                 <img src="../assets/icon/menu.svg">
               </template>
-              <b-dropdown-item-button class="mt-2 mb-2" v-b-toggle.sideprofile>
+              <b-dropdown-item-button class="mt-2 mb-2 bgBtn">
                 <div @click="onLogout()">
                   <img src="../assets/icon/logout.png" class="mr-2" style="width: 25px">
                   Logout
@@ -19,11 +18,6 @@
               </b-dropdown>
             </b-col>
           </b-row>
-          <div>
-            <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
-              <p>{{dataSender}}</p>
-              <p>{{name}}</p>
-          </div>
           <div class="div3 mt-5 mb-5">
             <input
             type="text"
@@ -66,7 +60,7 @@
             >Unread</b-button>
             </div>
         </div>
-        <div class="row">
+        <div class="row ml-3">
             <div class="col-lg-12 user-list">
               <div v-for="(item, index) in listUsers" :key="index">
                 <div
@@ -80,15 +74,11 @@
                       <div class="row text-left mt-4">
                         <div class="col-lg-3 col-3">
             <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
-
-                          <!-- <img :src="`${URL}/${item.image}`" alt=""> -->
                         </div>
                         <div class="col-lg-7 col-7">
                           <p class="font-weight-bold">{{ item.name }}</p>
-                          <p style="margin-top: -18px">{{ item.created_at }}</p>
                         </div>
                         <div class="col-lg-2 col-2">
-                          <!-- <p class="font-weight-bold">15.20</p> -->
                         </div>
                       </div>
                     </div>
@@ -99,37 +89,30 @@
           </div>
         </b-col>
         <b-col lg="9" class="chatBlank">
-          <div class="side-right chatBlank" v-if="userReceiver !== ''">
-          <div
-            class="row"
-            style="background-color: #ffffff"
-            v-b-toggle.sidebar-right
-          >
-            <div class="col-lg-8 col-8 text-left pt-4 pl-2 pr-2">
-              <div class="row">
-                <div class="col-lg-1 col-3">
-                  <img
-                    width="70px"
-                    :src="`http://localhost:3000/${imageName}`"
-                  />
-                </div>
-                <div class="col-lg-4 col-9">
-                  <p class="mt-1 font-weight-bold ml-4">{{ userReceiver }}</p>
-                  <p style="margin-top: -10px" class="ml-4">Online</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-4 text-right p-4">
-              <img src="../assets/img/Profile menu.svg" />
-            </div>
+          <div class="side-right" v-if="userReceiver !== ''">
+  <b-card>
+      <div class="user-bar">
+          <div class="userRec">
+          <img class="photoProfile ml-3" :src="`http://localhost:3000/${senderImage}`">
+          <div>
+          <h5 class="ml-3 font-weight-bold mt-2">{{userReceiver}}</h5>
+          <p class="ml-3" style="color: #7E98DF;">Online</p>
           </div>
-          <div class="row in-chat">
+      </div>
+          <div class="profileUser">
+              <img src="../assets/icon/dot-menu.svg">
+          </div>
+      </div>
+  </b-card>
+  <div class="row in-chat">
+      <!-- SENDER -->
               <div class="col-lg-12" v-for="(item, index) in historyMessages" :key="'a'+index">
               <div class="row text-left" v-if="item.sender !== dataSender">
                 <div
                   class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat"
                 >
-                  <img :src="`http://localhost:3000/${imageName}`" style="width: 50px;"/>
+                              <img class="photoProfile ml-4" :src="`http://localhost:3000/${senderImage}`">
+
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
                   </p>
@@ -142,15 +125,16 @@
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
-                  <img :src="`http://localhost:3000/${senderImage}`" style="width: 50px;"/>
+                              <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
+
                 </div>
               </div>
-
             </div>
+            <!-- SHOW -->
             <div class="col-lg-12" v-for="(item, index) in chatPrivates" :key="index">
               <div class="row text-left" v-if="item.sender !== dataSender">
                 <div class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat">
-                  <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
+                  <img class="photoProfile ml-4" :src="`http://localhost:3000/${senderImage}`">
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
                   </p>
@@ -169,28 +153,26 @@
 
             </div>
           </div>
-
-          <form @submit.prevent="sendMessage()">
+          <div class="sendNow">
+          <form class="sendChat" @submit.prevent="sendMessage()">
             <div class="row d-flex align-items-center justify-content-center">
               <div class="col-lg-11 col-9 ">
-                <input type="text" class="form-control" placeholder="Ketik pesan" v-model="chatData"/>
+                <input type="text" class="form-control" placeholder="Type your message..." v-model="chatData"/>
               </div>
               <div class="col-lg-1 col-3 text-right">
                 <div class="row">
-                  <button class="btn btn-primary w-100">Send</button>
+                  <button class="btn ml-3"><img src="../assets/icon/send.png" style="width: 30px; background: red;"></button>
                 </div>
               </div>
             </div>
           </form>
+          </div>
         </div>
         <div class="chatBlank" v-else>
-            <!-- <div class="chatBlank"> -->
               <h1>Please select a chat to start messaging</h1>
-            <!-- </div> -->
         </div>
         </b-col>
       </b-row>
-    </div>
   </div>
 </template>
 
@@ -201,6 +183,7 @@ import io from 'socket.io-client'
 import { mapActions } from 'vuex'
 
 export default {
+  title: 'Telegram | Chat',
   name: 'Chatlist',
   // components: {
   //   'google-maps': VueGoogleMaps.Map
@@ -340,6 +323,78 @@ export default {
 </script>
 
 <style scoped>
+.myButton{
+    background:url(../assets/icon/send.png) no-repeat;
+    cursor:pointer;
+    border:none;
+    width:50px;
+    height:50px;
+    /* background: red; */
+}
+
+.myButton:active  /* use Dot here */
+{
+    background:url(../assets/icon/send.png) no-repeat;
+}
+.bubble-your {
+  max-width: 50%;
+  padding: 20px;
+  background: #7e98df;
+  border-radius: 35px 35px 35px 10px;
+  color: white;
+}
+.bubble-me {
+  max-width: 50%;
+  padding: 20px;
+  background: #5EB4DD;
+  border-radius: 35px 35px 10px 30px;
+  color: white;
+}
+input{
+    background: #FAFAFA;
+border-radius: 15px;
+}
+.sendNow{
+    background: #FFFFFF ;
+    padding: 30px 33px 30px 20px;
+    margin-right: -23px;
+}
+.side-right {
+  height: 105vh !important;
+  width: 98%;
+  display: grid;
+  grid-template-rows: 1.5fr 6fr 1.5fr;
+}
+.in-chat {
+  overflow: scroll;
+  background: #FAFAFA;
+}
+.in-chat::-webkit-scrollbar {
+  width: 5px;
+}
+.profileUser{
+    margin: 25px 30px 0 0;
+}
+.profileUser img {
+    cursor: pointer;
+}
+.user-bar {
+    display: flex;
+    justify-content: space-between;
+}
+.userRec {
+    display: flex;
+    justify-content: left;
+}
+.card {
+    border-color: transparent;
+    margin-right: -23px;
+
+}
+.bgBtn {
+background: #7E98DF;
+border-radius: 35px 10px 35px 35px;
+}
 .chatBlank h1 {
   position: absolute;
   left: 17%;
@@ -354,7 +409,7 @@ export default {
   width: 64px;
   height: 64px;
   background-size: cover;
-  border-radius: 30px;
+  border-radius: 20px;
 }
 .div3 {
   display: flex;
@@ -369,44 +424,6 @@ export default {
   background: #FAFAFA;
   height: 100%;
 }
-.map {
-  width: 100%;
-  height: 300px;
-}
-.btn-important {
-  background-color: #7e98df;
-  border-radius: 20px;
-  width: 120px;
-  height: 40px;
-}
-.main-chat {
-  /* height: 90vh; */
-  display: flex;
-  flex-direction: column;
-}
-.menu-chat {
-  margin-left: 30px;
-  margin-right: 30px;
-}
-.menu {
-  overflow: scroll;
-}
-.menu::-webkit-scrollbar {
-  width: 0;
-  height: 3px;
-}
-.menu::-webkit-scrollbar-thumb {
-  background-color: gray;
-}
-.chating {
-  position: relative;
-}
-.side-right {
-  height: 110vh !important;
-  width: 98%;
-  display: grid;
-  grid-template-rows: 1.5fr 6fr 1.5fr;
-}
 .user-list {
   overflow: scroll;
   height: 70vh;
@@ -417,54 +434,5 @@ export default {
 .user-list::-webkit-scrollbar-thumb {
   background-color: gray;
 }
-.in-chat {
-  overflow: scroll;
-  background: #FAFAFA;
-}
-.in-chat::-webkit-scrollbar {
-  width: 5px;
-}
-.in-chat::-webkit-scrollbar-thumb {
-  background-color: gray;
-}
-.row-chat p {
-  margin-bottom: 0;
-}
-.bubble-your {
-  max-width: 50%;
-  padding: 20px;
-  background: #7e98df;
-  border-radius: 35px 35px 35px 10px;
-  color: white;
-}
-.bubble-me {
-  max-width: 50%;
-  padding: 20px;
-  background: #787894;
-  border-radius: 35px 35px 10px 30px;
-  color: white;
-}
-.notice {
-  color: white;
-  background-color: blue;
-  border-radius: 20px;
-  text-align: center;
-  width: 20px !important;
-}
 
-.notice-count {
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  border-radius: 50%;
-}
-@media (max-width: 576px) {
-  .profile {
-    display: none;
-  }
-  .menu-chat {
-    margin-left: 60px;
-    margin-right: 60px;
-  }
-}
 </style>
