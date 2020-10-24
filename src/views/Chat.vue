@@ -9,13 +9,40 @@
                <template v-slot:button-content>
                 <img src="../assets/icon/menu.svg">
               </template>
-              <b-dropdown-item-button class="mt-2 mb-2 bgBtn">
-                <div @click="onLogout()">
-                  <img src="../assets/icon/logout.png" class="mr-2" style="width: 25px">
-                  Logout
-                </div>
+              <b-dropdown-item-button class="mt-2 mb-2" v-b-toggle.sideprofile>
+                <b-icon icon="gear" class="mr-4"></b-icon>
+                Setting
               </b-dropdown-item-button>
-              </b-dropdown>
+              <b-dropdown-item-button class="mt-2 mb-2" v-b-modal="'mapmodal'">
+                  <b-icon icon="map" class="mr-4"></b-icon>
+                Map
+              </b-dropdown-item-button>
+              <b-dropdown-item class="mt-2 mb-2">
+                <b-icon icon="person" class="mr-4"></b-icon>
+                Contact
+              </b-dropdown-item>
+              <b-dropdown-item class="mt-2 mb-2">
+                <b-icon icon="telephone" class="mr-4"></b-icon>
+                Call
+              </b-dropdown-item>
+              <b-dropdown-item class="mt-2 mb-2">
+                <b-icon icon="bookmark" class="mr-4"></b-icon>
+                Save message
+              </b-dropdown-item>
+              <b-dropdown-item class="mt-2 mb-2">
+                <b-icon icon="person-plus" flip-h class="mr-4"></b-icon>
+                Invite friend
+              </b-dropdown-item>
+              <b-dropdown-item>
+                <b-icon icon="question-circle" class="mr-4"></b-icon>
+                FAQ
+              </b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item-button class="mt-2 mb-2" @click="onLogout">
+                <b-icon icon="box-arrow-in-left" class="mr-4"></b-icon>
+                Logout
+              </b-dropdown-item-button>
+            </b-dropdown>
             </b-col>
           </b-row>
           <div class="div3 mt-5 mb-5">

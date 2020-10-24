@@ -67,7 +67,8 @@ export default {
             this.$swal('Email does\'t exist')
           } else if (response === 'Email or password is wrong!') {
             this.$swal('Wrong password!')
-          } else {
+          } else if (response === 'Login Success') {
+            console.log(response)
             window.location = '/'
           }
         })

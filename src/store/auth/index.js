@@ -39,7 +39,7 @@ const actions = {
       axios
         .post(`${URL}/users/login`, payload)
         .then(response => {
-          if (response.data.message === 'Login success!') {
+          if (response.data.message === 'Login Success') {
             localStorage.setItem('phone', response.data.data.phone)
             localStorage.setItem('name', response.data.data.name)
             localStorage.setItem('bio', response.data.data.bio)
