@@ -46,6 +46,8 @@ const actions = {
             localStorage.setItem('image', response.data.data.image)
             localStorage.setItem('email', response.data.data.email)
             localStorage.setItem('token', response.data.data.token)
+            localStorage.setItem('id', response.data.data.id)
+            localStorage.setItem('username', response.data.data.username)
             resolve(response.data.message)
           } else {
             resolve(response.data.message)
@@ -66,19 +68,6 @@ const actions = {
         })
         .catch(() => {
           alert('Register failed')
-        })
-    })
-  },
-  updateData (context, payload) {
-    context.commit('SET_ALL_LOADING', true)
-    return new Promise((resolve, reject) => {
-      axios.patch(`${URL}/users/update/${payload.email}`, payload.formdata)
-        .then((response) => {
-          resolve()
-        }).catch((err) => {
-          console.log(err)
-        }).finally(() => {
-          context.commit('SET_ALL_LOADING', false)
         })
     })
   },

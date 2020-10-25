@@ -22,7 +22,6 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
 .notice {
   color: white;
   background-color: blue;

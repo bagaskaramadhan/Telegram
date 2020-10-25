@@ -13,31 +13,6 @@
                 <b-icon icon="gear" class="mr-4"></b-icon>
                 Setting
               </b-dropdown-item-button>
-              <b-dropdown-item-button class="mt-2 mb-2" v-b-modal="'mapmodal'">
-                  <b-icon icon="map" class="mr-4"></b-icon>
-                Map
-              </b-dropdown-item-button>
-              <b-dropdown-item class="mt-2 mb-2">
-                <b-icon icon="person" class="mr-4"></b-icon>
-                Contact
-              </b-dropdown-item>
-              <b-dropdown-item class="mt-2 mb-2">
-                <b-icon icon="telephone" class="mr-4"></b-icon>
-                Call
-              </b-dropdown-item>
-              <b-dropdown-item class="mt-2 mb-2">
-                <b-icon icon="bookmark" class="mr-4"></b-icon>
-                Save message
-              </b-dropdown-item>
-              <b-dropdown-item class="mt-2 mb-2">
-                <b-icon icon="person-plus" flip-h class="mr-4"></b-icon>
-                Invite friend
-              </b-dropdown-item>
-              <b-dropdown-item>
-                <b-icon icon="question-circle" class="mr-4"></b-icon>
-                FAQ
-              </b-dropdown-item>
-              <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item-button class="mt-2 mb-2" @click="onLogout">
                 <b-icon icon="box-arrow-in-left" class="mr-4"></b-icon>
                 Logout
@@ -100,10 +75,10 @@
                     <div class="side-chat">
                       <div class="row text-left mt-4">
                         <div class="col-lg-3 col-3">
-            <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
+            <img class="photoProfile" :src="`${URL}/${senderImage}`">
                         </div>
                         <div class="col-lg-7 col-7">
-                          <p class="font-weight-bold">{{ item.name }}</p>
+                          <p class="font-weight-bold">{{ item.username }}</p>
                         </div>
                         <div class="col-lg-2 col-2">
                         </div>
@@ -120,7 +95,7 @@
   <b-card>
       <div class="user-bar">
           <div class="userRec">
-          <img class="photoProfile ml-3" :src="`http://localhost:3000/${senderImage}`">
+          <img class="photoProfile ml-3" :src="`${URL}/${senderImage}`">
           <div>
           <h5 class="ml-3 font-weight-bold mt-2">{{userReceiver}}</h5>
           <p class="ml-3" style="color: #7E98DF;">Online</p>
@@ -138,7 +113,7 @@
                 <div
                   class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat"
                 >
-                              <img class="photoProfile ml-4" :src="`http://localhost:3000/${senderImage}`">
+                              <img class="photoProfile ml-4" :src="`${URL}/${senderImage}`">
 
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
@@ -152,7 +127,7 @@
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
-                              <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
+                              <img class="photoProfile" :src="`${URL}/${senderImage}`">
 
                 </div>
               </div>
@@ -161,7 +136,7 @@
             <div class="col-lg-12" v-for="(item, index) in chatPrivates" :key="index">
               <div class="row text-left" v-if="item.sender !== dataSender">
                 <div class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat">
-                  <img class="photoProfile ml-4" :src="`http://localhost:3000/${senderImage}`">
+                  <img class="photoProfile ml-4" :src="`${URL}/${senderImage}`">
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
                   </p>
@@ -174,7 +149,7 @@
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
-                  <img class="photoProfile" :src="`http://localhost:3000/${senderImage}`">
+                  <img class="photoProfile" :src="`${URL}/${senderImage}`">
                   </div>
               </div>
 
@@ -199,27 +174,77 @@
               <h1>Please select a chat to start messaging</h1>
         </div>
         </b-col>
+       <!-- <b-sidebar id="sideprofile" width="350px" shadow no-header bg-variant="white" header-class="sidebarHeader">
+      <div class="p-2">
+        <div class="col sidebarHeader">
+          <div class="row text-center mx-auto">
+
+            <div class="col-1 col-lg-1" @click="hideSideMenu()">
+              <b-button size="lg" variant="outline">
+                <img src="../assets/icon/back.png">
+              </b-button>
+            </div>
+
+            <div class="col-10 col-lg-10 mt-2" >
+              <h5 class="text-center mt-1" style="color:#2675EC">{{username}}</h5>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="px-3 py-2 text-center mx-auto">
+            <img class="photoProfile" :src="`${URL}/${image}`">
+          </div>
+
+          <div class="col text-center">
+            <h4>{{name}}</h4>
+          </div>
+        </div>
+
+        <div class="col ">
+          <h6><b>Account</b></h6>
+          <p>{{phone}}</p>
+        </div>
+
+        <hr>
+
+        <div class="col ">
+          <h6><b>@{{name}}</b></h6>
+          <small class="smallText">Username</small>
+        </div>
+
+        <hr>
+
+        <div class="col ">
+          <h6><b>{{bio}}</b></h6>
+          <small class="smallText">Bio</small>
+        </div>
+
+        <hr>
+      </div>
+    </b-sidebar> -->
+<sideProfile/>
       </b-row>
+
   </div>
 </template>
 
 <script>
-import { URL } from '../helpers/env'
-import io from 'socket.io-client'
-// import * as VueGoogleMaps from 'vue2-google-maps'
 import { mapActions } from 'vuex'
-
+import io from 'socket.io-client'
+import sideProfile from '../components/SideProfile'
+const { URL } = require('../helpers/env')
 export default {
-  title: 'Telegram | Chat',
+  title: 'Telegram',
   name: 'Chatlist',
-  // components: {
-  //   'google-maps': VueGoogleMaps.Map
-  // },
+  components: {
+    sideProfile
+  },
   data () {
     return {
-      URL: process.env.URL,
+      URL: URL,
       socket: io(`${URL}`),
-      // dataSender: this.$route.query.email,
       dataSender: localStorage.getItem('email'),
       btnActive: 'btnAll',
       listUsers: [],
@@ -232,7 +257,9 @@ export default {
       historyMessages: [],
       senderImage: localStorage.getItem('image'),
       name: localStorage.getItem('name'),
+      idUser: localStorage.getItem('id'),
       image: localStorage.getItem('image'),
+      username: localStorage.getItem('username'),
       newImage: '',
       phone: localStorage.getItem('phone'),
       bio: localStorage.getItem('bio'),
@@ -245,10 +272,16 @@ export default {
     }
   },
   methods: {
+    hideSideMenu () {
+      this.$root.$emit('bv::toggle::collapse', 'sideprofile')
+    },
+    // getID () {
+    //   alert(this.idUser)
+    // },
     selectUser (receiver) {
       this.chatRoom = []
       this.chatPrivates = []
-      this.userReceiver = receiver.name
+      this.userReceiver = receiver.username
       this.dataReceiver = receiver.email
       this.imageName = receiver.image
       this.setChatPrivate()
@@ -264,9 +297,6 @@ export default {
         // console.log(data)
         this.historyMessages = data
       })
-    },
-    toogleMenu () {
-      alert(`${URL}`)
     },
     sendMessage () {
       const message = {
@@ -298,38 +328,18 @@ export default {
       })
       this.chatPrivates = chatPrivate
     },
-
-    process (event) {
-      this.form.newImages = event.target.files[0]
-    },
-
-    updateMessage () {
-      const fd = new FormData()
-      fd.append('name', this.form.name)
-      fd.append('image', this.form.newImages)
-      fd.append('bio', this.form.bio)
-      fd.append('phone', this.form.phone)
-      const data = {
-        email: this.dataSender,
-        formdata: fd
-      }
-      this.actionupdateData(data).then((response) => {
-        alert('Update data success')
-        window.location = '/'
-      }).catch((err) => {
-        alert(err)
-      })
-    },
-    ...mapActions({
-      actionupdateData: 'auth/updateData'
-    }),
-
     onLogout () {
       localStorage.removeItem('token')
       localStorage.removeItem('image')
       localStorage.removeItem('email')
+      localStorage.removeItem('name')
+      localStorage.removeItem('bio')
+      localStorage.removeItem('phone')
       window.location = '/login'
-    }
+    },
+    ...mapActions({
+      onGetOneUser: 'duser/getOneUser'
+    })
   },
   mounted () {
     this.socket.emit('get-all-users', [])
@@ -337,9 +347,7 @@ export default {
       this.listUsers = data
     })
     this.socket.emit('join-room', this.dataSender)
-
     this.socket.on('private-message', (payload) => {
-      // console.log(payload)
       this.chatRoom = [...this.chatRoom, payload]
       if (this.dataReceiver !== null) {
         this.setChatPrivate()
