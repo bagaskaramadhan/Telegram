@@ -54,7 +54,7 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
-
+import Swal from 'sweetalert2'
 export default {
   data () {
     return {
@@ -75,8 +75,20 @@ export default {
       this.onUpdateData(this.edit[0])
         .then((response) => {
           console.log(response)
-          this.$swal('Update success')
-          window.location.reload()
+          if (response === 'Wrong image type') {
+            Swal.fire('Error', 'Image must jpg or jpeg!', 'error')
+            setTimeout(() => {
+            }, 1000)
+          } else if (response === 'Large image') {
+            Swal.fire('Error', 'Image too large, you can upload files up to 200 kb', 'error')
+            setTimeout(() => {
+            }, 1000)
+          } else if (response === 'Update success') {
+            this.$swal('Success Update Data')
+            location.reload()
+          }
+          // this.$swal('Update success')
+          // window.location.reload()
         })
         .catch((err) => {
           alert(err)
