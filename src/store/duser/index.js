@@ -5,7 +5,8 @@ const state = () => {
   return {
     all: [],
     oneUser: [],
-    userChat: []
+    userChat: [],
+    getFriends: []
   }
 }
 
@@ -24,6 +25,9 @@ const getters = {
   },
   getUserChat (state) {
     return state.userChat
+  },
+  getuserFriends (state) {
+    return state.getFriends
   }
 }
 
@@ -36,10 +40,26 @@ const mutations = {
   },
   SET_USER_CHAT (state, payload) {
     state.userChat = payload
+  },
+  SET_USER_FRIENDS (state, payload) {
+    state.getFriends = payload
   }
 }
 
 const actions = {
+  getuserFriends (context, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get(`${URL}/users/getone/${localStorage.getItem('idReceiver')}`)
+        .then((response) => {
+          console.log(response.data.data)
+          context.commit('SET_USER_FRIENDS', response.data.data)
+          resolve(response.data.data)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   getAllUsers (context, payload) {
     // console.log(payload)
     this.sortBy = payload ? null : 'id'
@@ -85,21 +105,24 @@ const actions = {
     })
   },
   updateData (context, payload) {
-    console.log(payload)
     const formdata = new FormData()
-    formdata.append('name', payload.name)
+    formdata.append('username', payload.username)
     formdata.append('image', payload.newImage)
     formdata.append('phone', payload.phone)
     formdata.append('bio', payload.bio)
+    console.log(payload)
 
-    for (var value of formdata.values()) {
-      console.log(value)
-    }
+    // for (var value of formdata.values()) {
+    //   console.log(value)
+    // }
     return new Promise((resolve, reject) => {
-      axios.patch(`${URL}/users/edit/${payload.id}`, formdata)
+      axios.patch(`${URL}/users/edit/${localStorage.getItem('id')}`, formdata)
         .then((response) => {
+          // if (response.data.message === 'Update success') {
+          localStorage.setItem('image', response.data.data.image)
+          // }
           resolve(response.data.message)
-          // console.log(response)
+          // console.log(response.data.message)
         })
         .catch((err) => {
           reject(err)

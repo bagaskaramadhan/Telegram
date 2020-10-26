@@ -74,8 +74,9 @@
                   <div class="col-lg-12">
                     <div class="side-chat">
                       <div class="row text-left mt-4">
+                {{item.id}}
                         <div class="col-lg-3 col-3">
-            <img class="photoProfile" :src="`${URL}/${senderImage}`">
+            <img class="photoProfile" :src="`${URL}/${item.image}`">
                         </div>
                         <div class="col-lg-7 col-7">
                           <p class="font-weight-bold">{{ item.username }}</p>
@@ -95,25 +96,25 @@
   <b-card>
       <div class="user-bar">
           <div class="userRec">
-          <img class="photoProfile ml-3" :src="`${URL}/${senderImage}`">
+          <img class="photoProfile ml-3" :src="`${URL}/${imageName}`">
           <div>
           <h5 class="ml-3 font-weight-bold mt-2">{{userReceiver}}</h5>
           <p class="ml-3" style="color: #7E98DF;">Online</p>
           </div>
       </div>
           <div class="profileUser">
-              <img src="../assets/icon/dot-menu.svg">
+              <img src="../assets/icon/dot-menu.svg" v-b-toggle.sideprofilechat @click="sideBarChat()">
           </div>
       </div>
   </b-card>
   <div class="row in-chat">
       <!-- SENDER -->
-              <div class="col-lg-12" v-for="(item, index) in historyMessages" :key="'a'+index">
+              <div class="col-lg-12" v-for="(item, index) in historyMessages" :key="index">
               <div class="row text-left" v-if="item.sender !== dataSender">
                 <div
                   class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat"
                 >
-                              <img class="photoProfile ml-4" :src="`${URL}/${senderImage}`">
+                              <!-- <img class="photoProfile ml-4" :src="`${URL}/${imageName}`"> -->
 
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
@@ -127,7 +128,7 @@
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
-                              <img class="photoProfile" :src="`${URL}/${senderImage}`">
+                              <!-- <img class="photoProfile" :src="`${URL}/${senderImage}`"> -->
 
                 </div>
               </div>
@@ -136,7 +137,7 @@
             <div class="col-lg-12" v-for="(item, index) in chatPrivates" :key="index">
               <div class="row text-left" v-if="item.sender !== dataSender">
                 <div class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat">
-                  <img class="photoProfile ml-4" :src="`${URL}/${senderImage}`">
+                  <!-- <img class="photoProfile ml-4" :src="`${URL}/${imageName}`"> -->
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
                   </p>
@@ -149,7 +150,7 @@
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
-                  <img class="photoProfile" :src="`${URL}/${senderImage}`">
+                  <!-- <img class="photoProfile" :src="`${URL}/${senderImage}`"> -->
                   </div>
               </div>
 
@@ -225,6 +226,7 @@
       </div>
     </b-sidebar> -->
 <sideProfile/>
+<sideProfileChat/>
       </b-row>
 
   </div>
@@ -234,12 +236,14 @@
 import { mapActions } from 'vuex'
 import io from 'socket.io-client'
 import sideProfile from '../components/SideProfile'
+import sideProfileChat from '../components/SideProfileChat'
 const { URL } = require('../helpers/env')
 export default {
   title: 'Telegram',
   name: 'Chatlist',
   components: {
-    sideProfile
+    sideProfile,
+    sideProfileChat
   },
   data () {
     return {
@@ -272,6 +276,12 @@ export default {
     }
   },
   methods: {
+    sideBarChat () {
+      console.log(this.onGetFriends())
+      // const datafriend = this.userReceiver
+      // // console.log(fullname)
+      // this.onGetUserChat(datafriend)
+    },
     hideSideMenu () {
       this.$root.$emit('bv::toggle::collapse', 'sideprofile')
     },
@@ -281,9 +291,11 @@ export default {
     selectUser (receiver) {
       this.chatRoom = []
       this.chatPrivates = []
+      this.idReceiver = receiver.id
       this.userReceiver = receiver.username
       this.dataReceiver = receiver.email
       this.imageName = receiver.image
+      localStorage.setItem('idReceiver', receiver.id)
       this.setChatPrivate()
       // alert(this.dataSender)
       this.socket.emit('get-history-message', {
@@ -338,7 +350,8 @@ export default {
       window.location = '/login'
     },
     ...mapActions({
-      onGetOneUser: 'duser/getOneUser'
+      onGetFriends: 'duser/getuserFriends',
+      onGetUserChat: 'duser/getUserChat'
     })
   },
   mounted () {

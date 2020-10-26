@@ -1,8 +1,7 @@
 <template>
   <div>
-    <b-sidebar id="sideprofile" width="350px" shadow no-header bg-variant="white" header-class="sidebarHeader">
+    <b-sidebar id="sideprofilechat" right width="350px" shadow no-header bg-variant="white" header-class="sidebarHeader">
       <div class="p-2">
-        <!-- {{dataUser[0]}} -->
         <div class="col sidebarHeader">
           <div class="row text-center mx-auto">
 
@@ -11,7 +10,7 @@
                 <img src="../assets/icon/back.png">
               </b-button>
             </div>
-
+            <!-- {{dataUser}} -->
             <div class="col-10 col-lg-10 mt-2" >
               <h5 class="text-center" style="color:#2675EC">@{{dataUser[0].username}}</h5>
             </div>
@@ -26,13 +25,13 @@
 
           <div class="col text-center">
             <h6>{{dataUser[0].name}}</h6>
-            <small class="smallText">@{{dataUser[0].username}}</small>
+            <small class="smallText">@{{dataUser[0].name}}</small>
           </div>
         </div>
 
         <div class="col ">
           <h6><b>Account</b></h6>
-          <p>+62{{dataUser[0].phone}}</p>
+          <p>{{dataUser[0].phone}}</p>
         </div>
 
         <hr>
@@ -51,56 +50,6 @@
 
         <hr>
 
-        <div class="col">
-          <div class="col">
-            <button class="btn btn-primary btn-block" v-b-modal="'editmodal'">Edit</button>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="col ">
-          <div class="row">
-            <div class="col mt-2">
-              <h6><b>Settings</b></h6>
-            </div>
-            <div class="col">
-              <b-button v-b-toggle.settings variant="outline" block >
-                <b-icon icon="chevron-down"></b-icon>
-              </b-button>
-
-            </div>
-          </div>
-              <b-collapse id="settings" class="mt-2">
-                <div class="col border">
-                    <div class="row">
-                      <div class="col-4">
-                        <b-icon icon="bell"></b-icon>
-                      </div>
-                      <div class="col-8">
-                        <small>Notification And Sound</small>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                        <b-icon icon="lock"></b-icon>
-                      </div>
-                      <div class="col-8">
-                        <small>Privacy And Security</small>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                        <b-icon icon="graph-up"></b-icon>
-                      </div>
-                      <div class="col-8">
-                        <small>Data And Storage</small>
-                      </div>
-                    </div>
-                </div>
-              </b-collapse>
-        </div>
-
         <!-- <b-button v-b-toggle.settings variant="outline" block >
               <h6><b>Settings</b></h6>
               <b-icon icon="chevron-down"></b-icon>
@@ -112,22 +61,17 @@
                 </b-card>
               </b-collapse> -->
       </div>
-      <ModalEdit/>
     </b-sidebar>
   </div>
 </template>
 
 <script>
-import ModalEdit from './ModalEdit'
 
 import { mapGetters, mapActions } from 'vuex'
 
 const { URL } = require('../helpers/env')
 
 export default {
-  components: {
-    ModalEdit
-  },
   data () {
     return {
       URL: URL,
@@ -136,15 +80,15 @@ export default {
   },
   methods: {
     hideSideMenu () {
-      this.$root.$emit('bv::toggle::collapse', 'sideprofile')
+      this.$root.$emit('bv::toggle::collapse', 'sideprofilechat')
     },
     ...mapActions({
-      acUser: 'duser/getOneUser'
+      acUser: 'duser/getuserFriends'
     })
   },
   computed: {
     ...mapGetters({
-      dataUser: 'duser/getOneUser'
+      dataUser: 'duser/getuserFriends'
     })
   },
   mounted () {
