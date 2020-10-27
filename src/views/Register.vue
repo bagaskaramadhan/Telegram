@@ -2,15 +2,12 @@
   <div>
     <div class="grayBlank">
       <div class="login-box">
-        <b-row>
-          <b-col lg="1">
+        <div class="titlePage">
             <router-link to="/login">
-            <img src="../assets/icon/back.svg" alt="">
+            <img src="../assets/icon/back.svg" class="arrowStyle">
             </router-link>
-          </b-col>
-          <b-col lg="10"><h4 style="color: #7e98df">Register</h4>
-          </b-col>
-        </b-row>
+            <h4 style="color: #7e98df">Register</h4>
+        </div>
         <p class="mt-3" style="text-align: left">Let’s create your account!</p>
         <form @submit.prevent="onRegister()">
           <div class="user-box">
@@ -34,6 +31,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
   title: 'Telegram | Register',
   name: 'Register',
@@ -50,10 +48,12 @@ export default {
     onRegister () {
       this.actionRegister(this.form)
         .then((response) => {
+          console.log(response)
           if (response === 'Email is already registered!') {
-            this.$swal('Email is already registered!')
-          } else {
-            this.$swal('Sign up success')
+            // this.$swal('Email is already registered!')
+            Swal.fire('Error', 'Email is already registered', 'error')
+          } else if (response === 'Register success!') {
+            Swal.fire('Sign up success', 'Activation your email', 'success')
             this.$router.push('login')
           }
         })
@@ -78,8 +78,10 @@ export default {
   padding: 20px 0;
   width: 100%;
   color: #ffffff;
+  border-color: white;
 }
 .btnStyle:hover {
+  border-color: white;
   background: #ffffff;
   border-radius: 70px;
   border-color: #7e98df;
@@ -134,5 +136,29 @@ export default {
   top: -20px;
   left: 0;
   font-size: 10px;
+}
+.titlePage{
+  display: flex;
+  justify-content: left;
+}
+.arrowStyle{
+  padding-right: 120px;
+  margin-right: 0;
+}
+@media screen and (max-width: 600px) {
+  .grayBlank{
+    padding: 0;
+    margin: 0;
+  }
+  .login-box{
+      background: #ffffff;
+      box-sizing: border-box;
+      margin: 0 0;
+      border-radius: 0;
+      padding: 126px 50px;
+  }
+  .arrowStyle{
+    margin-right: -45px;
+  }
 }
 </style>

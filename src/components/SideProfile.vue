@@ -100,17 +100,6 @@
                 </div>
               </b-collapse>
         </div>
-
-        <!-- <b-button v-b-toggle.settings variant="outline" block >
-              <h6><b>Settings</b></h6>
-              <b-icon icon="chevron-down"></b-icon>
-              </b-button> -->
-
-              <!-- <b-collapse id="settings" class="mt-2">
-                <b-card>
-                  <p class="card-text">Collapse contents Here</p>
-                </b-card>
-              </b-collapse> -->
       </div>
       <ModalEdit/>
     </b-sidebar>

@@ -2,7 +2,7 @@
   <div>
     <div class="grayBlank">
       <div class="login-box">
-        <h4 style="color: #7e98df">Login</h4>
+        <h4 style="color: #7e98df" class="styleTitle">Login</h4>
         <p style="text-align: left">Hi, Welcome back!</p>
         <form @submit.prevent="onLogin()">
           <div class="user-box">
@@ -47,6 +47,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
   title: 'Telegram | Login',
   name: 'Login',
@@ -63,12 +64,16 @@ export default {
     onLogin () {
       this.actionLogin(this.form)
         .then((response) => {
+          console.log(response)
           if (response === 'Email not registered, please register') {
-            this.$swal('Email does\'t exist')
+            // this.$swal('Email does\'t exist')
+            Swal.fire('error', 'Email doesn\'t exist', 'error')
           } else if (response === 'Email or password is wrong!') {
-            this.$swal('Wrong password!')
+            // this.$swal('Wrong password!')
+            Swal.fire('error', 'Wrong password!', 'error')
+          } else if (response === 'Please Active Email First') {
+            Swal.fire('error', 'Activation your email', 'error')
           } else if (response === 'Login Success') {
-            console.log(response)
             window.location = '/'
           }
         })
@@ -158,5 +163,27 @@ export default {
   top: -20px;
   left: 0;
   font-size: 10px;
+}
+.styleTitle{
+  margin-left: 140px;
+  margin-bottom: 23px;
+
+}
+@media screen and (max-width: 600px) {
+  .login-box{
+    background: #ffffff;
+    box-sizing: border-box;
+    margin: 0 0;
+    border-radius: 0;
+    padding: 113px 50px;
+  }
+  .grayBlank{
+    padding: 0;
+    margin: 0;
+  }
+  .styleTitle{
+    margin-left: 95px;
+    margin-bottom: 23px;
+  }
 }
 </style>

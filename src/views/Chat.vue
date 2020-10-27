@@ -1,6 +1,6 @@
 <template>
   <div>
-      <b-row class="no-gutters">
+      <b-row class="no-gutters chatApp">
         <b-col lg="3" class="listUser">
           <b-row>
             <b-col class="mt-4 ml-5"><h3 style="color: #7E98DF;">Telegram</h3></b-col>
@@ -62,7 +62,7 @@
             >Unread</b-button>
             </div>
         </div>
-        <div class="row ml-3">
+        <div class="row ml-3 displayWeb">
             <div class="col-lg-12 user-list">
               <div v-for="(item, index) in listUsers" :key="index">
                 <div
@@ -74,7 +74,36 @@
                   <div class="col-lg-12">
                     <div class="side-chat">
                       <div class="row text-left mt-4">
-                {{item.id}}
+                <!-- {{item.id}} -->
+                        <div class="col-lg-3 col-3">
+            <img class="photoProfile" :src="`${URL}/${item.image}`">
+                        </div>
+                        <div class="col-lg-7 col-7">
+                          <p class="font-weight-bold">{{ item.username }}</p>
+                        </div>
+                        <div class="col-lg-2 col-2">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row ml-3 responsiveMobile">
+            <div class="col-lg-12 user-list">
+              <div v-for="(item, index) in listUsers" :key="index">
+                <div
+                  class="row"
+                  style="cursor: pointer"
+                  v-if="item.email !== dataSender"
+                  @click="selectUser(item,index)"
+                  v-b-toggle.responsiveChat
+                >
+                  <div class="col-lg-12">
+                    <div class="side-chat">
+                      <div class="row text-left mt-4">
+                <!-- {{item.id}} -->
                         <div class="col-lg-3 col-3">
             <img class="photoProfile" :src="`${URL}/${item.image}`">
                         </div>
@@ -91,7 +120,7 @@
             </div>
           </div>
         </b-col>
-        <b-col lg="9" class="chatBlank">
+        <b-col lg="9" class="chatBlank displayWeb">
           <div class="side-right" v-if="userReceiver !== ''">
   <b-card>
       <div class="user-bar">
@@ -115,7 +144,12 @@
                   class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat"
                 >
                               <!-- <img class="photoProfile ml-4" :src="`${URL}/${imageName}`"> -->
-
+<b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
                   </p>
@@ -125,6 +159,12 @@
                 <div
                   class="col-lg-12 col-12 d-flex align-items-end justify-content-end p-4 row-chat"
                 style="margin-top: -20px">
+                <b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
@@ -138,6 +178,12 @@
               <div class="row text-left" v-if="item.sender !== dataSender">
                 <div class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat">
                   <!-- <img class="photoProfile ml-4" :src="`${URL}/${imageName}`"> -->
+<b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item href="#" @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
                   <p class="ml-4 bubble-your">
                     {{item.msg}}
                   </p>
@@ -147,6 +193,12 @@
                 <div
                   class="col-lg-12 col-12 d-flex align-items-end justify-content-end p-4 row-chat"
                 style="margin-top: -20px">
+                <b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item href="#" @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
                   <p class="mr-4 bubble-me">
                   {{item.msg}}
                   </p>
@@ -171,62 +223,128 @@
           </form>
           </div>
         </div>
-        <div class="chatBlank" v-else>
+        <div class="chatBlank displayWeb" v-else>
               <h1>Please select a chat to start messaging</h1>
         </div>
         </b-col>
-       <!-- <b-sidebar id="sideprofile" width="350px" shadow no-header bg-variant="white" header-class="sidebarHeader">
-      <div class="p-2">
-        <div class="col sidebarHeader">
-          <div class="row text-center mx-auto">
-
-            <div class="col-1 col-lg-1" @click="hideSideMenu()">
-              <b-button size="lg" variant="outline">
-                <img src="../assets/icon/back.png">
-              </b-button>
-            </div>
-
-            <div class="col-10 col-lg-10 mt-2" >
-              <h5 class="text-center mt-1" style="color:#2675EC">{{username}}</h5>
-            </div>
-
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <div>
+    <b-sidebar id="responsiveChat"  class="asdasd" width="350px" shadow no-header bg-variant="white" header-class="sidebarHeader">
+      <b-col lg="9" class="chatBlank responsiveMobile">
+          <div class="side-right" v-if="userReceiver !== ''">
+  <b-card>
+      <div class="user-bar papapa">
+          <div class="userRec">
+          <img class="photoProfile ml-3" :src="`${URL}/${imageName}`">
+          <div>
+          <h5 class="ml-3 font-weight-bold mt-2">{{userReceiver}}</h5>
+          <p class="ml-3" style="color: #7E98DF;">Online</p>
           </div>
-        </div>
-
-        <div class="col">
-          <div class="px-3 py-2 text-center mx-auto">
-            <img class="photoProfile" :src="`${URL}/${image}`">
-          </div>
-
-          <div class="col text-center">
-            <h4>{{name}}</h4>
-          </div>
-        </div>
-
-        <div class="col ">
-          <h6><b>Account</b></h6>
-          <p>{{phone}}</p>
-        </div>
-
-        <hr>
-
-        <div class="col ">
-          <h6><b>@{{name}}</b></h6>
-          <small class="smallText">Username</small>
-        </div>
-
-        <hr>
-
-        <div class="col ">
-          <h6><b>{{bio}}</b></h6>
-          <small class="smallText">Bio</small>
-        </div>
-
-        <hr>
       </div>
-    </b-sidebar> -->
+          <div class="profileUser">
+              <img src="../assets/icon/dot-menu.svg" v-b-toggle.sideprofilechat @click="sideBarChat()">
+          </div>
+      </div>
+  </b-card>
+  <div class="row in-chat">
+      <!-- SENDER -->
+              <div class="col-lg-12" v-for="(item, index) in historyMessages" :key="index">
+              <div class="row text-left" v-if="item.sender !== dataSender">
+                <div
+                  class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat"
+                >
+                              <!-- <img class="photoProfile ml-4" :src="`${URL}/${imageName}`"> -->
+<b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
+                  <p class="ml-4 bubble-your">
+                    {{item.msg}}
+                  </p>
+                </div>
+              </div>
+              <div class="row text-right" v-else>
+                <div
+                  class="col-lg-12 col-12 d-flex align-items-end justify-content-end p-4 row-chat"
+                style="margin-top: -20px">
+                <b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
+                  <p class="mr-4 bubble-me">
+                  {{item.msg}}
+                  </p>
+                              <!-- <img class="photoProfile" :src="`${URL}/${senderImage}`"> -->
+
+                </div>
+              </div>
+            </div>
+            <!-- SHOW -->
+            <div class="col-lg-12" v-for="(item, index) in chatPrivates" :key="index">
+              <div class="row text-left" v-if="item.sender !== dataSender">
+                <div class="col-lg-12 col-12 d-flex align-items-end p-4 row-chat">
+                  <!-- <img class="photoProfile ml-4" :src="`${URL}/${imageName}`"> -->
+<b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item href="#" @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
+                  <p class="ml-4 bubble-your">
+                    {{item.msg}}
+                  </p>
+                </div>
+              </div>
+              <div class="row text-right" v-else>
+                <div
+                  class="col-lg-12 col-12 d-flex align-items-end justify-content-end p-4 row-chat"
+                style="margin-top: -20px">
+                <b-dropdown id="dropdown-dropleft" dropleft text="Drop-Left" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret style="margin-top:-30px; margin-left:-25px">
+                        <template v-slot:button-content>
+                          <b-icon-three-dots></b-icon-three-dots>
+                        </template>
+                        <b-dropdown-item href="#" @click="deleted(item.id)">Delete</b-dropdown-item>
+                      </b-dropdown>
+                  <p class="mr-4 bubble-me">
+                  {{item.msg}}
+                  </p>
+                  <!-- <img class="photoProfile" :src="`${URL}/${senderImage}`"> -->
+                  </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="sendNow">
+          <form class="sendChat" @submit.prevent="sendMessage()">
+            <div class="row d-flex align-items-center justify-content-center">
+              <div class="col-lg-11 col-9 ">
+                <input type="text" class="form-control" placeholder="Type your message..." v-model="chatData"/>
+              </div>
+              <div class="col-lg-1 col-3 text-right">
+                <div class="row">
+                  <button class="btn ml-3"><img src="../assets/icon/send.png" style="width: 30px; background: red;"></button>
+                </div>
+              </div>
+            </div>
+          </form>
+          </div>
+        </div>
+        <!-- <div class="chatBlank responsiveMobile" v-else>
+              <h1>Please select a chat to start messaging</h1>
+        </div> -->
+        </b-col>
+    </b-sidebar>
+  </div>
 <sideProfile/>
 <sideProfileChat/>
+<!-- <sideChat/> -->
       </b-row>
 
   </div>
@@ -236,7 +354,9 @@
 import { mapActions } from 'vuex'
 import io from 'socket.io-client'
 import sideProfile from '../components/SideProfile'
+// import sideChat from '../components/SideChat'
 import sideProfileChat from '../components/SideProfileChat'
+import Swal from 'sweetalert2'
 const { URL } = require('../helpers/env')
 export default {
   title: 'Telegram',
@@ -244,6 +364,7 @@ export default {
   components: {
     sideProfile,
     sideProfileChat
+    // sideChat
   },
   data () {
     return {
@@ -276,6 +397,17 @@ export default {
     }
   },
   methods: {
+    deleted (id) {
+      // alert(id)
+      this.onDeleteMsg(id)
+        .then((result) => {
+          Swal.fire('Success', 'Delete success')
+          window.location = '/'
+        })
+        .catch((err) => {
+          alert(err.message)
+        })
+    },
     sideBarChat () {
       console.log(this.onGetFriends())
       // const datafriend = this.userReceiver
@@ -351,7 +483,8 @@ export default {
     },
     ...mapActions({
       onGetFriends: 'duser/getuserFriends',
-      onGetUserChat: 'duser/getUserChat'
+      onGetUserChat: 'duser/getUserChat',
+      onDeleteMsg: 'duser/deleteMessage'
     })
   },
   mounted () {
@@ -379,9 +512,7 @@ export default {
     height:50px;
     /* background: red; */
 }
-
-.myButton:active  /* use Dot here */
-{
+.myButton:active {
     background:url(../assets/icon/send.png) no-repeat;
 }
 .bubble-your {
@@ -482,5 +613,49 @@ border-radius: 35px 10px 35px 35px;
 .user-list::-webkit-scrollbar-thumb {
   background-color: gray;
 }
-
+.responsiveMobile{
+  display: none;
+  /* background: #000; */
+}
+@media screen and (max-width: 600px){
+  .side-right{
+    height: 92vh !important;
+    width: 327px;
+    display: grid;
+    grid-template-rows: 80px 460px 0px;
+  }
+  .ChatStyle{
+    width: 10px;
+  }
+  .displayWeb {
+    display: none;
+  }
+  .listUser {
+    margin-right: 0;
+    padding-right: 15px;
+    margin-bottom: 0;
+  }
+  .chatApp {
+    margin-bottom: 0;
+  }
+  .responsiveMobile{
+    display: inline;
+  }
+  .user-list{
+    height: 57vh;
+  }
+  .sendNow{
+    padding: 0 20px 0 35px;
+    margin: 17px 0 0 0;
+  }
+  .in-chat{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: 0px;
+  }
+  .card-body{
+    padding: 0;
+  }
+}
 </style>

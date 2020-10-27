@@ -129,6 +129,18 @@ const actions = {
           // console.log(err)
         })
     })
+  },
+  deleteMessage (context, payload) {
+    return new Promise((resolve, reject) => {
+      axios.delete(`${URL}/users/deleteMessage/${payload}`)
+        .then((result) => {
+          // console.log(result)
+          // console.log(result.data.message)
+          resolve(result.data.message)
+        }).catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
